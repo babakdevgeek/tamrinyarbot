@@ -47,8 +47,13 @@ bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
   const line = "━━━━━━━━━━━━━━━━━━━━━━━━";
 
   let text = `📋 *لیست حرکات شما*\n${line}\n`;
-  user.exercises.forEach((ex) => {
+  user.exercises.forEach((ex, index) => {
     text += `🏋️ ${ex.name} | ست: ${ex.sets} | وزنه: ${ex.weight}kg\n`;
+
+    // بین آیتم‌ها فاصله بده، ولی بعد آخری نه
+    if (index < user.exercises.length - 1) {
+      text += "\n\n";
+    }
   });
   text += line;
 
