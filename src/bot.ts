@@ -10,5 +10,7 @@ bot.start((ctx) => {
 });
 
 bot.action("HOME", async (ctx) => {
-  await ctx.editMessageText("منوی اصلی", homeKeyboard);
+  await ctx.editMessageText("منوی اصلی", {
+    reply_markup: homeKeyboard.reply_markup,
+  });
 });
