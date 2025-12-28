@@ -5,6 +5,7 @@ import { steps } from "./constants/steps.js";
 import { addExcerciseMenu } from "./keyboards/Cancel.js";
 import { getExercisesKeyboard } from "./keyboards/allExcercises.js";
 import { buttonsText } from "./constants/buttonsText.js";
+import { persianToEnglishNumber } from "./lib/persianNumConvertors.js";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -29,6 +30,33 @@ bot.hears(buttonsText.home.addExercise, async (ctx) => {
     },
   });
   await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
+});
+
+bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
+  const user = await prisma.user.findUnique({
+    where: { telegramId: BigInt(ctx.from.id) },
+    include: { exercises: true },
+  });
+
+  if (!user || user.exercises.length === 0) {
+    await ctx.reply("هنوز حرکتی ثبت نکرده‌ای 💤", homeMenu);
+    return;
+  }
+
+  // ساخت متن خوانا
+  let text = `📋 *لیست حرکات شما*\n━━━━━━━━━━━━━━\n`;
+  user.exercises.forEach((ex) => {
+    text += `🏋️ ${ex.name} | ست: ${ex.sets} | وزنه: ${ex.weight}kg\n`;
+  });
+  text += "━━━━━━━━━━━━━━";
+
+  await ctx.replyWithPhoto(
+    "https://www.primalstrength.com/cdn/shop/files/gymdesign_render_Two_collumn_grid_cb1b5850-fa8e-4a7b-a2b3-190c2e45facd.jpg?v=1680719688&width=500",
+    {
+      caption: text,
+      parse_mode: "Markdown",
+    }
+  );
 });
 
 bot.hears(buttonsText.home.myExercises, async (ctx) => {
@@ -72,7 +100,7 @@ bot.hears(/.+/, async (ctx) => {
         tempReps: null,
       },
     });
-    await ctx.reply("عملیات کنسل شد ❌", homeMenu);
+    await ctx.reply("بازگشت به منوی اصلی ⬇️", homeMenu);
     return;
   }
 
@@ -86,7 +114,7 @@ bot.hears(/.+/, async (ctx) => {
   }
 
   if (user.currentStep === steps.wait_sets) {
-    const sets = parseInt(text);
+    const sets = parseInt(persianToEnglishNumber(text));
     if (isNaN(sets)) {
       await ctx.reply("لطفا یک عدد معتبر وارد کنید 🔢");
       return;
@@ -110,7 +138,7 @@ bot.hears(/.+/, async (ctx) => {
   }
 
   if (user.currentStep === steps.wait_weight) {
-    const weight = parseFloat(text);
+    const weight = parseInt(persianToEnglishNumber(text));
     if (isNaN(weight)) {
       await ctx.reply("لطفا یک عدد معتبر وارد کنید 🔢");
       return;
