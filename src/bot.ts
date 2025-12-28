@@ -44,7 +44,7 @@ bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
   }
 
   // ساخت متن خوانا
-  const line = "━━━━━━━━━━━━━━━━━━━━━━━━";
+  const line = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
   let text = `📋 *لیست حرکات شما*\n${line}\n`;
   user.exercises.forEach((ex, index) => {
