@@ -44,16 +44,13 @@ bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
   }
 
   // ساخت متن خوانا
-  const line = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
+  const line = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
-  let text = `📋 *لیست حرکات شما*\n${line}\n`;
+  let text = `📋 *لیست حرکات شما*\n${line}\n\n`;
   user.exercises.forEach((ex, index) => {
     text += `🏋️ ${ex.name} | ست: ${ex.sets} | وزنه: ${ex.weight}kg\n`;
 
-    // بین آیتم‌ها فاصله بده، ولی بعد آخری نه
-    if (index < user.exercises.length - 1) {
-      text += "\n\n";
-    }
+    text += "\n\n";
   });
   text += line;
 
