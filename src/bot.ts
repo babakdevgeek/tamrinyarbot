@@ -1,8 +1,9 @@
-import { Telegraf } from "telegraf";
+import { Markup, Telegraf } from "telegraf";
 import { homeMenu } from "./keyboards/home.keyboard.js";
 import prisma from "./db.js";
 import { steps } from "./constants/steps.js";
 import { addExcerciseMenu } from "./keyboards/Cancel.js";
+import { getExercisesKeyboard } from "./keyboards/allExcercises.js";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -33,7 +34,10 @@ bot.hears(homeMenuTexts[0] as string, async (ctx) => {
 
 bot.hears(/.+/, async (ctx) => {
   const telegramId = BigInt(ctx.from.id);
-  const user = await prisma.user.findUnique({ where: { telegramId } });
+  const user = await prisma.user.findUnique({
+    where: { telegramId: BigInt(ctx.from.id) },
+    include: { exercises: true }, // ✅ این خط باعث می‌شود exercises موجود باشد
+  });
   if (!user) return;
 
   const text = ctx.message.text.trim();
@@ -116,4 +120,27 @@ bot.hears(/.+/, async (ctx) => {
       homeMenu
     );
   }
+
+  const exercise = user.exercises.find((ex) => ex.name === text);
+  if (!exercise) return;
+
+  const details = `🏋️‍♂️ ${exercise.name}\nست: ${exercise.sets}\nتکرار: ${exercise.reps}\nوزنه: ${exercise.weight} کیلو`;
+
+  // نمایش جزئیات + دکمه بازگشت
+  await ctx.reply(details, Markup.keyboard([["⬅️ بازگشت"]]).resize());
+});
+
+bot.hears("📋 حرکات من", async (ctx) => {
+  const user = await prisma.user.findUnique({
+    where: { telegramId: BigInt(ctx.from.id) },
+  });
+  if (!user) return;
+
+  const keyboard = await getExercisesKeyboard(user.id);
+  if (!keyboard) {
+    await ctx.reply("هنوز حرکتی ثبت نکرده‌اید.", homeMenu);
+    return;
+  }
+
+  await ctx.reply("حرکات شما:", keyboard);
 });
