@@ -132,7 +132,7 @@ bot.hears(/.+/, async (ctx) => {
   // نمایش جزئیات + دکمه بازگشت
   await ctx.reply(details, Markup.keyboard([["⬅️ بازگشت"]]).resize());
 });
-
+console.log(JSON.stringify(homeMenuTexts));
 bot.hears(homeMenuTexts[1] as string, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
