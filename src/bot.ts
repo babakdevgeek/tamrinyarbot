@@ -4,6 +4,7 @@ import prisma from "./db.js";
 import { steps } from "./constants/steps.js";
 import { addExcerciseMenu } from "./keyboards/Cancel.js";
 import { getExercisesKeyboard } from "./keyboards/allExcercises.js";
+import { buttonsText } from "./constants/buttonsText.js";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -16,10 +17,7 @@ bot.start((ctx) => {
   );
 });
 
-const homeMenuTexts = homeMenu.reply_markup.keyboard.flat();
-const addExcerciseMenuTexts = addExcerciseMenu.reply_markup.keyboard.flat();
-
-bot.hears(homeMenuTexts[0] as string, async (ctx) => {
+bot.hears(buttonsText.home.addExercise, async (ctx) => {
   await prisma.user.upsert({
     where: { telegramId: BigInt(ctx.from.id) },
     update: { currentStep: steps.wait_name },
@@ -45,7 +43,10 @@ bot.hears(/.+/, async (ctx) => {
 
   // cancel or return
 
-  if (text === addExcerciseMenuTexts[0] || text === addExcerciseMenuTexts[1]) {
+  if (
+    text === buttonsText.addExerciseMenu.back ||
+    text === buttonsText.addExerciseMenu.cancel
+  ) {
     await prisma.user.update({
       where: { telegramId },
       data: {
@@ -132,8 +133,7 @@ bot.hears(/.+/, async (ctx) => {
   // نمایش جزئیات + دکمه بازگشت
   await ctx.reply(details, Markup.keyboard([["⬅️ بازگشت"]]).resize());
 });
-console.log(JSON.stringify(homeMenuTexts));
-bot.hears(homeMenuTexts[1] as string, async (ctx) => {
+bot.hears(buttonsText.home.myExercises, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
   });
