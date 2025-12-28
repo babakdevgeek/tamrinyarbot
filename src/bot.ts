@@ -31,6 +31,22 @@ bot.hears(buttonsText.home.addExercise, async (ctx) => {
   await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
 });
 
+bot.hears(buttonsText.home.myExercises, async (ctx) => {
+  const user = await prisma.user.findUnique({
+    where: { telegramId: BigInt(ctx.from.id) },
+  });
+  if (!user) return;
+
+  const keyboard = await getExercisesKeyboard(user.id);
+  if (!keyboard) {
+    await ctx.reply("هنوز حرکتی ثبت نکرده‌اید.", homeMenu);
+    return;
+  }
+
+  await ctx.reply("حرکات شما:", keyboard);
+});
+
+// it should be last hears
 bot.hears(/.+/, async (ctx) => {
   const telegramId = BigInt(ctx.from.id);
   const user = await prisma.user.findUnique({
@@ -132,20 +148,4 @@ bot.hears(/.+/, async (ctx) => {
 
   // نمایش جزئیات + دکمه بازگشت
   await ctx.reply(details, Markup.keyboard([["⬅️ بازگشت"]]).resize());
-});
-
-bot.hears(buttonsText.home.myExercises, async (ctx) => {
-  await ctx.reply("در حال دریافت حرکات شما... ⏳");
-  const user = await prisma.user.findUnique({
-    where: { telegramId: BigInt(ctx.from.id) },
-  });
-  if (!user) return;
-
-  const keyboard = await getExercisesKeyboard(user.id);
-  if (!keyboard) {
-    await ctx.reply("هنوز حرکتی ثبت نکرده‌اید.", homeMenu);
-    return;
-  }
-
-  await ctx.reply("حرکات شما:", keyboard);
 });
