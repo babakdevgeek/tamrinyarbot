@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/api/bot.js",
-    "build": "tsc",
+    "build": "tsc --output dist",
     "dev": "tsc --watch"
   },
   "keywords": [],
