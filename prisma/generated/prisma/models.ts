@@ -10,5 +10,4 @@
  */
 export type * from './models/User.js'
 export type * from './models/Exercise.js'
-export type * from './models/Set.js'
 export type * from './commonInputTypes.js'

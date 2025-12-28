@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id         Int        @id @default(autoincrement())\n  telegramId BigInt     @unique\n  exercises  Exercise[]\n  firstname  String\n  username   String?\n  createdAt  DateTime   @default(now())\n}\n\nmodel Exercise {\n  id     Int    @id @default(autoincrement())\n  name   String\n  userId Int\n  user   User   @relation(fields: [userId], references: [id])\n  sets   Set[]\n}\n\nmodel Set {\n  id         Int      @id @default(autoincrement())\n  weight     Float\n  reps       Int\n  exerciseId Int\n  exercise   Exercise @relation(fields: [exerciseId], references: [id])\n  createdAt  DateTime @default(now())\n}\n",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id               Int        @id @default(autoincrement())\n  telegramId       BigInt     @unique\n  exercises        Exercise[]\n  firstname        String\n  username         String?\n  currentStep      String? // null یعنی هیچ فرایندی در جریان نیست\n  tempExerciseName String? // ذخیره موقت اسم حرکت\n  tempSets         Int? // ذخیره موقت تعداد ست\n  tempReps         String? // ذخیره موقت تعداد تکرار\n  tempWeight       Float? // ذخیره موقت وزن\n  createdAt        DateTime   @default(now())\n}\n\nmodel Exercise {\n  id     Int    @id @default(autoincrement())\n  name   String\n  userId Int\n  user   User   @relation(fields: [userId], references: [id])\n  sets   Int\n  reps   String\n  weight Float // وزنه\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"telegramId\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"exercises\",\"kind\":\"object\",\"type\":\"Exercise\",\"relationName\":\"ExerciseToUser\"},{\"name\":\"firstname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Exercise\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"ExerciseToUser\"},{\"name\":\"sets\",\"kind\":\"object\",\"type\":\"Set\",\"relationName\":\"ExerciseToSet\"}],\"dbName\":null},\"Set\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"weight\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"reps\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"exerciseId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"exercise\",\"kind\":\"object\",\"type\":\"Exercise\",\"relationName\":\"ExerciseToSet\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"telegramId\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"exercises\",\"kind\":\"object\",\"type\":\"Exercise\",\"relationName\":\"ExerciseToUser\"},{\"name\":\"firstname\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currentStep\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tempExerciseName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tempSets\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"tempReps\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tempWeight\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Exercise\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"ExerciseToUser\"},{\"name\":\"sets\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"reps\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weight\",\"kind\":\"scalar\",\"type\":\"Float\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -193,16 +193,6 @@ export interface PrismaClient<
     * ```
     */
   get exercise(): Prisma.ExerciseDelegate<ExtArgs, { omit: OmitOpts }>;
-
-  /**
-   * `prisma.set`: Exposes CRUD operations for the **Set** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Sets
-    * const sets = await prisma.set.findMany()
-    * ```
-    */
-  get set(): Prisma.SetDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

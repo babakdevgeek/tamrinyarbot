@@ -15,11 +15,16 @@ datasource db {
 
 
 model User {
-  id         Int        @id @default(autoincrement())
+    id         Int        @id @default(autoincrement())
   telegramId BigInt     @unique
   exercises  Exercise[]
-  firstname String
-  username String?
+  firstname  String
+  username   String?
+  currentStep String?   // null یعنی هیچ فرایندی در جریان نیست
+  tempExerciseName String? // ذخیره موقت اسم حرکت
+  tempSets   Int?      // ذخیره موقت تعداد ست
+  tempReps   String?      // ذخیره موقت تعداد تکرار
+  tempWeight Float?    // ذخیره موقت وزن
   createdAt  DateTime   @default(now())
 }
 
@@ -28,14 +33,8 @@ model Exercise {
   name      String
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
-  sets      Set[]
+  sets      Int
+  reps      String
+  weight    Float    // وزنه
 }
 
-model Set {
-  id         Int      @id @default(autoincrement())
-  weight     Float
-  reps       Int
-  exerciseId Int
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  createdAt  DateTime @default(now())
-}

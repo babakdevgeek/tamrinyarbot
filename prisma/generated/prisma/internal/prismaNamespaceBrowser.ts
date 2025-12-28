@@ -52,8 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Exercise: 'Exercise',
-  Set: 'Set'
+  Exercise: 'Exercise'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -77,6 +76,11 @@ export const UserScalarFieldEnum = {
   telegramId: 'telegramId',
   firstname: 'firstname',
   username: 'username',
+  currentStep: 'currentStep',
+  tempExerciseName: 'tempExerciseName',
+  tempSets: 'tempSets',
+  tempReps: 'tempReps',
+  tempWeight: 'tempWeight',
   createdAt: 'createdAt'
 } as const
 
@@ -86,21 +90,13 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const ExerciseScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  userId: 'userId'
+  userId: 'userId',
+  sets: 'sets',
+  reps: 'reps',
+  weight: 'weight'
 } as const
 
 export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
-
-
-export const SetScalarFieldEnum = {
-  id: 'id',
-  weight: 'weight',
-  reps: 'reps',
-  exerciseId: 'exerciseId',
-  createdAt: 'createdAt'
-} as const
-
-export type SetScalarFieldEnum = (typeof SetScalarFieldEnum)[keyof typeof SetScalarFieldEnum]
 
 
 export const SortOrder = {

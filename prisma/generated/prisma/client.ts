@@ -49,8 +49,3 @@ export type User = Prisma.UserModel
  * 
  */
 export type Exercise = Prisma.ExerciseModel
-/**
- * Model Set
- * 
- */
-export type Set = Prisma.SetModel

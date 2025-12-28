@@ -385,8 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  Exercise: 'Exercise',
-  Set: 'Set'
+  Exercise: 'Exercise'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +401,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "exercise" | "set"
+    modelProps: "user" | "exercise"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -554,80 +553,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Set: {
-      payload: Prisma.$SetPayload<ExtArgs>
-      fields: Prisma.SetFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.SetFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.SetFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>
-        }
-        findFirst: {
-          args: Prisma.SetFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.SetFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>
-        }
-        findMany: {
-          args: Prisma.SetFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>[]
-        }
-        create: {
-          args: Prisma.SetCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>
-        }
-        createMany: {
-          args: Prisma.SetCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.SetCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>[]
-        }
-        delete: {
-          args: Prisma.SetDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>
-        }
-        update: {
-          args: Prisma.SetUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>
-        }
-        deleteMany: {
-          args: Prisma.SetDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.SetUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.SetUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>[]
-        }
-        upsert: {
-          args: Prisma.SetUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$SetPayload>
-        }
-        aggregate: {
-          args: Prisma.SetAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSet>
-        }
-        groupBy: {
-          args: Prisma.SetGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SetGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.SetCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.SetCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -672,6 +597,11 @@ export const UserScalarFieldEnum = {
   telegramId: 'telegramId',
   firstname: 'firstname',
   username: 'username',
+  currentStep: 'currentStep',
+  tempExerciseName: 'tempExerciseName',
+  tempSets: 'tempSets',
+  tempReps: 'tempReps',
+  tempWeight: 'tempWeight',
   createdAt: 'createdAt'
 } as const
 
@@ -681,21 +611,13 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const ExerciseScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  userId: 'userId'
+  userId: 'userId',
+  sets: 'sets',
+  reps: 'reps',
+  weight: 'weight'
 } as const
 
 export type ExerciseScalarFieldEnum = (typeof ExerciseScalarFieldEnum)[keyof typeof ExerciseScalarFieldEnum]
-
-
-export const SetScalarFieldEnum = {
-  id: 'id',
-  weight: 'weight',
-  reps: 'reps',
-  exerciseId: 'exerciseId',
-  createdAt: 'createdAt'
-} as const
-
-export type SetScalarFieldEnum = (typeof SetScalarFieldEnum)[keyof typeof SetScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -771,20 +693,6 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -795,6 +703,20 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 /**
@@ -894,7 +816,6 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   exercise?: Prisma.ExerciseOmit
-  set?: Prisma.SetOmit
 }
 
 /* Types for Logging */
