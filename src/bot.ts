@@ -18,9 +18,15 @@ bot.start((ctx) => {
 const homeMenuTexts = homeMenu.reply_markup.keyboard.flat();
 
 bot.hears(homeMenuTexts[0] as string, async (ctx) => {
-  await prisma.user.update({
+  await prisma.user.upsert({
     where: { telegramId: BigInt(ctx.from.id) },
-    data: { currentStep: steps.wait_name },
+    update: { currentStep: steps.wait_name },
+    create: {
+      telegramId: BigInt(ctx.from.id),
+      currentStep: steps.wait_name,
+      username: ctx.from.username || null,
+      firstname: ctx.from.first_name,
+    },
   });
   await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
 });
