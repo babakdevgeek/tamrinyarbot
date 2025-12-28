@@ -1,5 +1,5 @@
 import { Telegraf } from "telegraf";
-import { homeKeyboard } from "./keyboards/home.keyboard.js";
+import { homeMenu } from "./keyboards/home.keyboard.js";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -8,14 +8,12 @@ bot.start((ctx) => {
     `
         سلام ${ctx.from.first_name}
         `,
-    {
-      reply_markup: homeKeyboard.reply_markup,
-    }
+    homeMenu
   );
 });
 
-bot.action("HOME", async (ctx) => {
-  await ctx.editMessageText("منوی اصلی", {
-    reply_markup: homeKeyboard.reply_markup,
-  });
-});
+// bot.action("HOME", async (ctx) => {
+//   await ctx.editMessageText("منوی اصلی", {
+//     reply_markup: homeMenu.reply_markup,
+//   });
+// });
