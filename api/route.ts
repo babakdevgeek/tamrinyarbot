@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { bot } from "../src/bot";
+import { bot } from "../src/bot.js";
 export default function (req: VercelRequest, res: VercelResponse) {
   if (req.method === "POST") {
     bot.handleUpdate(req.body);
