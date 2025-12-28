@@ -4,9 +4,14 @@ import { homeKeyboard } from "./keyboards/home.keyboard.js";
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
 bot.start((ctx) => {
-  ctx.reply(`
+  ctx.reply(
+    `
         سلام ${ctx.from.first_name}
-        `);
+        `,
+    {
+      reply_markup: homeKeyboard.reply_markup,
+    }
+  );
 });
 
 bot.action("HOME", async (ctx) => {
