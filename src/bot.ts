@@ -17,6 +17,7 @@ bot.start((ctx) => {
 });
 
 const homeMenuTexts = homeMenu.reply_markup.keyboard.flat();
+const addExcerciseMenuTexts = addExcerciseMenu.reply_markup.keyboard.flat();
 
 bot.hears(homeMenuTexts[0] as string, async (ctx) => {
   await prisma.user.upsert({
@@ -43,7 +44,7 @@ bot.hears(/.+/, async (ctx) => {
   const text = ctx.message.text.trim();
 
   // cancel or return
-  const addExcerciseMenuTexts = addExcerciseMenu.reply_markup.keyboard.flat();
+
   if (text === addExcerciseMenuTexts[0] || text === addExcerciseMenuTexts[1]) {
     await prisma.user.update({
       where: { telegramId },
@@ -87,6 +88,8 @@ bot.hears(/.+/, async (ctx) => {
       where: { telegramId },
       data: { tempReps: reps, currentStep: steps.wait_weight },
     });
+    await ctx.reply("وزنه را وارد کنید (کیلوگرم) 🔢", addExcerciseMenu);
+    return;
   }
 
   if (user.currentStep === steps.wait_weight) {
@@ -130,7 +133,7 @@ bot.hears(/.+/, async (ctx) => {
   await ctx.reply(details, Markup.keyboard([["⬅️ بازگشت"]]).resize());
 });
 
-bot.hears("📋 حرکات من", async (ctx) => {
+bot.hears(homeMenuTexts[1] as string, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
   });
