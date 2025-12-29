@@ -29,6 +29,7 @@ export type AggregateUser = {
 export type UserAvgAggregateOutputType = {
   id: number | null
   telegramId: number | null
+  selectedExerciseId: number | null
   tempSets: number | null
   tempWeight: number | null
 }
@@ -36,6 +37,7 @@ export type UserAvgAggregateOutputType = {
 export type UserSumAggregateOutputType = {
   id: number | null
   telegramId: bigint | null
+  selectedExerciseId: number | null
   tempSets: number | null
   tempWeight: number | null
 }
@@ -45,6 +47,7 @@ export type UserMinAggregateOutputType = {
   telegramId: bigint | null
   firstname: string | null
   username: string | null
+  selectedExerciseId: number | null
   currentStep: string | null
   tempExerciseName: string | null
   tempSets: number | null
@@ -58,6 +61,7 @@ export type UserMaxAggregateOutputType = {
   telegramId: bigint | null
   firstname: string | null
   username: string | null
+  selectedExerciseId: number | null
   currentStep: string | null
   tempExerciseName: string | null
   tempSets: number | null
@@ -71,6 +75,7 @@ export type UserCountAggregateOutputType = {
   telegramId: number
   firstname: number
   username: number
+  selectedExerciseId: number
   currentStep: number
   tempExerciseName: number
   tempSets: number
@@ -84,6 +89,7 @@ export type UserCountAggregateOutputType = {
 export type UserAvgAggregateInputType = {
   id?: true
   telegramId?: true
+  selectedExerciseId?: true
   tempSets?: true
   tempWeight?: true
 }
@@ -91,6 +97,7 @@ export type UserAvgAggregateInputType = {
 export type UserSumAggregateInputType = {
   id?: true
   telegramId?: true
+  selectedExerciseId?: true
   tempSets?: true
   tempWeight?: true
 }
@@ -100,6 +107,7 @@ export type UserMinAggregateInputType = {
   telegramId?: true
   firstname?: true
   username?: true
+  selectedExerciseId?: true
   currentStep?: true
   tempExerciseName?: true
   tempSets?: true
@@ -113,6 +121,7 @@ export type UserMaxAggregateInputType = {
   telegramId?: true
   firstname?: true
   username?: true
+  selectedExerciseId?: true
   currentStep?: true
   tempExerciseName?: true
   tempSets?: true
@@ -126,6 +135,7 @@ export type UserCountAggregateInputType = {
   telegramId?: true
   firstname?: true
   username?: true
+  selectedExerciseId?: true
   currentStep?: true
   tempExerciseName?: true
   tempSets?: true
@@ -226,6 +236,7 @@ export type UserGroupByOutputType = {
   telegramId: bigint
   firstname: string
   username: string | null
+  selectedExerciseId: number | null
   currentStep: string | null
   tempExerciseName: string | null
   tempSets: number | null
@@ -262,6 +273,7 @@ export type UserWhereInput = {
   telegramId?: Prisma.BigIntFilter<"User"> | bigint | number
   firstname?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringNullableFilter<"User"> | string | null
+  selectedExerciseId?: Prisma.IntNullableFilter<"User"> | number | null
   currentStep?: Prisma.StringNullableFilter<"User"> | string | null
   tempExerciseName?: Prisma.StringNullableFilter<"User"> | string | null
   tempSets?: Prisma.IntNullableFilter<"User"> | number | null
@@ -276,6 +288,7 @@ export type UserOrderByWithRelationInput = {
   telegramId?: Prisma.SortOrder
   firstname?: Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrderInput | Prisma.SortOrder
   currentStep?: Prisma.SortOrderInput | Prisma.SortOrder
   tempExerciseName?: Prisma.SortOrderInput | Prisma.SortOrder
   tempSets?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -293,6 +306,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   firstname?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringNullableFilter<"User"> | string | null
+  selectedExerciseId?: Prisma.IntNullableFilter<"User"> | number | null
   currentStep?: Prisma.StringNullableFilter<"User"> | string | null
   tempExerciseName?: Prisma.StringNullableFilter<"User"> | string | null
   tempSets?: Prisma.IntNullableFilter<"User"> | number | null
@@ -307,6 +321,7 @@ export type UserOrderByWithAggregationInput = {
   telegramId?: Prisma.SortOrder
   firstname?: Prisma.SortOrder
   username?: Prisma.SortOrderInput | Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrderInput | Prisma.SortOrder
   currentStep?: Prisma.SortOrderInput | Prisma.SortOrder
   tempExerciseName?: Prisma.SortOrderInput | Prisma.SortOrder
   tempSets?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -328,6 +343,7 @@ export type UserScalarWhereWithAggregatesInput = {
   telegramId?: Prisma.BigIntWithAggregatesFilter<"User"> | bigint | number
   firstname?: Prisma.StringWithAggregatesFilter<"User"> | string
   username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  selectedExerciseId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   currentStep?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   tempExerciseName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   tempSets?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
@@ -340,6 +356,7 @@ export type UserCreateInput = {
   telegramId: bigint | number
   firstname: string
   username?: string | null
+  selectedExerciseId?: number | null
   currentStep?: string | null
   tempExerciseName?: string | null
   tempSets?: number | null
@@ -354,6 +371,7 @@ export type UserUncheckedCreateInput = {
   telegramId: bigint | number
   firstname: string
   username?: string | null
+  selectedExerciseId?: number | null
   currentStep?: string | null
   tempExerciseName?: string | null
   tempSets?: number | null
@@ -367,6 +385,7 @@ export type UserUpdateInput = {
   telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedExerciseId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currentStep?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempExerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -381,6 +400,7 @@ export type UserUncheckedUpdateInput = {
   telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedExerciseId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currentStep?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempExerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -395,6 +415,7 @@ export type UserCreateManyInput = {
   telegramId: bigint | number
   firstname: string
   username?: string | null
+  selectedExerciseId?: number | null
   currentStep?: string | null
   tempExerciseName?: string | null
   tempSets?: number | null
@@ -407,6 +428,7 @@ export type UserUpdateManyMutationInput = {
   telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedExerciseId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currentStep?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempExerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -420,6 +442,7 @@ export type UserUncheckedUpdateManyInput = {
   telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedExerciseId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currentStep?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempExerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -433,6 +456,7 @@ export type UserCountOrderByAggregateInput = {
   telegramId?: Prisma.SortOrder
   firstname?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrder
   currentStep?: Prisma.SortOrder
   tempExerciseName?: Prisma.SortOrder
   tempSets?: Prisma.SortOrder
@@ -444,6 +468,7 @@ export type UserCountOrderByAggregateInput = {
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   telegramId?: Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrder
   tempSets?: Prisma.SortOrder
   tempWeight?: Prisma.SortOrder
 }
@@ -453,6 +478,7 @@ export type UserMaxOrderByAggregateInput = {
   telegramId?: Prisma.SortOrder
   firstname?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrder
   currentStep?: Prisma.SortOrder
   tempExerciseName?: Prisma.SortOrder
   tempSets?: Prisma.SortOrder
@@ -466,6 +492,7 @@ export type UserMinOrderByAggregateInput = {
   telegramId?: Prisma.SortOrder
   firstname?: Prisma.SortOrder
   username?: Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrder
   currentStep?: Prisma.SortOrder
   tempExerciseName?: Prisma.SortOrder
   tempSets?: Prisma.SortOrder
@@ -477,6 +504,7 @@ export type UserMinOrderByAggregateInput = {
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   telegramId?: Prisma.SortOrder
+  selectedExerciseId?: Prisma.SortOrder
   tempSets?: Prisma.SortOrder
   tempWeight?: Prisma.SortOrder
 }
@@ -548,6 +576,7 @@ export type UserCreateWithoutExercisesInput = {
   telegramId: bigint | number
   firstname: string
   username?: string | null
+  selectedExerciseId?: number | null
   currentStep?: string | null
   tempExerciseName?: string | null
   tempSets?: number | null
@@ -561,6 +590,7 @@ export type UserUncheckedCreateWithoutExercisesInput = {
   telegramId: bigint | number
   firstname: string
   username?: string | null
+  selectedExerciseId?: number | null
   currentStep?: string | null
   tempExerciseName?: string | null
   tempSets?: number | null
@@ -589,6 +619,7 @@ export type UserUpdateWithoutExercisesInput = {
   telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedExerciseId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currentStep?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempExerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -602,6 +633,7 @@ export type UserUncheckedUpdateWithoutExercisesInput = {
   telegramId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   firstname?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  selectedExerciseId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   currentStep?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempExerciseName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tempSets?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -646,6 +678,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   telegramId?: boolean
   firstname?: boolean
   username?: boolean
+  selectedExerciseId?: boolean
   currentStep?: boolean
   tempExerciseName?: boolean
   tempSets?: boolean
@@ -661,6 +694,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   telegramId?: boolean
   firstname?: boolean
   username?: boolean
+  selectedExerciseId?: boolean
   currentStep?: boolean
   tempExerciseName?: boolean
   tempSets?: boolean
@@ -674,6 +708,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   telegramId?: boolean
   firstname?: boolean
   username?: boolean
+  selectedExerciseId?: boolean
   currentStep?: boolean
   tempExerciseName?: boolean
   tempSets?: boolean
@@ -687,6 +722,7 @@ export type UserSelectScalar = {
   telegramId?: boolean
   firstname?: boolean
   username?: boolean
+  selectedExerciseId?: boolean
   currentStep?: boolean
   tempExerciseName?: boolean
   tempSets?: boolean
@@ -695,7 +731,7 @@ export type UserSelectScalar = {
   createdAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "telegramId" | "firstname" | "username" | "currentStep" | "tempExerciseName" | "tempSets" | "tempReps" | "tempWeight" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "telegramId" | "firstname" | "username" | "selectedExerciseId" | "currentStep" | "tempExerciseName" | "tempSets" | "tempReps" | "tempWeight" | "createdAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   exercises?: boolean | Prisma.User$exercisesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -713,6 +749,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     telegramId: bigint
     firstname: string
     username: string | null
+    selectedExerciseId: number | null
     currentStep: string | null
     tempExerciseName: string | null
     tempSets: number | null
@@ -1147,6 +1184,7 @@ export interface UserFieldRefs {
   readonly telegramId: Prisma.FieldRef<"User", 'BigInt'>
   readonly firstname: Prisma.FieldRef<"User", 'String'>
   readonly username: Prisma.FieldRef<"User", 'String'>
+  readonly selectedExerciseId: Prisma.FieldRef<"User", 'Int'>
   readonly currentStep: Prisma.FieldRef<"User", 'String'>
   readonly tempExerciseName: Prisma.FieldRef<"User", 'String'>
   readonly tempSets: Prisma.FieldRef<"User", 'Int'>

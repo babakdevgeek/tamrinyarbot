@@ -20,6 +20,7 @@ model User {
   exercises  Exercise[]
   firstname  String
   username   String?
+  selectedExerciseId Int?
   currentStep String?   // null یعنی هیچ فرایندی در جریان نیست
   tempExerciseName String? // ذخیره موقت اسم حرکت
   tempSets   Int?      // ذخیره موقت تعداد ست

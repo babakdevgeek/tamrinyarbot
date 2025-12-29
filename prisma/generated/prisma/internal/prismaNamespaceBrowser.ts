@@ -76,6 +76,7 @@ export const UserScalarFieldEnum = {
   telegramId: 'telegramId',
   firstname: 'firstname',
   username: 'username',
+  selectedExerciseId: 'selectedExerciseId',
   currentStep: 'currentStep',
   tempExerciseName: 'tempExerciseName',
   tempSets: 'tempSets',

@@ -63,6 +63,22 @@ bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
   );
 });
 
+bot.hears(buttonsText.excerciseDetails.delete, async (ctx) => {
+  const telegramId = BigInt(ctx.from.id);
+  const user = await prisma.user.findUnique({
+    where: { telegramId },
+  });
+  if (!user || !user.selectedExerciseId) return;
+  await prisma.exercise.delete({
+    where: { id: user.selectedExerciseId },
+  });
+  await prisma.user.update({
+    where: { telegramId },
+    data: { selectedExerciseId: null, currentStep: null },
+  });
+  await ctx.reply("حرکت با موفقیت حذف شد ✅", homeMenu);
+});
+
 bot.hears(buttonsText.home.myExercises, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
@@ -89,7 +105,7 @@ bot.hears(/.+/, async (ctx) => {
 
   const text = ctx.message.text.trim();
 
-  // cancel or return
+  // دکمه‌های بازگشت یا انصراف
 
   if (
     text === buttonsText.addExerciseMenu.back ||
@@ -107,7 +123,7 @@ bot.hears(/.+/, async (ctx) => {
     await ctx.reply("بازگشت به منوی اصلی ⬇️", homeMenu);
     return;
   }
-
+  // مراحل اضافه کردن حرکت جدید
   if (user.currentStep === steps.wait_name) {
     await prisma.user.update({
       where: { telegramId },
@@ -172,12 +188,30 @@ bot.hears(/.+/, async (ctx) => {
       homeMenu
     );
   }
+  // مدیریت انتخاب حرکت از صفحه حرکات من
 
   const exercise = user.exercises.find((ex) => ex.name === text);
   if (!exercise) return;
 
+  await prisma.user.update({
+    where: { telegramId },
+    data: {
+      selectedExerciseId: exercise.id,
+      currentStep: steps.in_excercise_details,
+    },
+  });
+
   const details = `🏋️‍♂️ ${exercise.name}\nست: ${exercise.sets}\nتکرار: ${exercise.reps}\nوزنه: ${exercise.weight} کیلو`;
 
-  // نمایش جزئیات + دکمه بازگشت
-  await ctx.reply(details, Markup.keyboard([["⬅️ بازگشت"]]).resize());
+  // نمایش جزئیات حرکت با گزینه‌های به‌روزرسانی و حذف
+  await ctx.reply(
+    details,
+    Markup.keyboard([
+      [
+        buttonsText.excerciseDetails.update,
+        buttonsText.excerciseDetails.delete,
+      ],
+      [buttonsText.excerciseDetails.back],
+    ]).resize()
+  );
 });

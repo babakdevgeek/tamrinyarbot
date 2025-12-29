@@ -10,4 +10,9 @@ export const buttonsText = {
     back: "⬅️ بازگشت",
     cancel: "❌ کنسل",
   },
+  excerciseDetails: {
+    delete: "🗑 حذف حرکت",
+    update: "✏️ آپدیت حرکت",
+    back: "⬅️ بازگشت",
+  },
 };
