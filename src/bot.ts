@@ -7,6 +7,7 @@ import { getExercisesKeyboard } from "./keyboards/allExcercises.js";
 import { buttonsText } from "./constants/buttonsText.js";
 import { persianToEnglishNumber } from "./lib/persianNumConvertors.js";
 import { text } from "node:stream/consumers";
+import { getSelectedExercise } from "./lib/getSelectedExcercise.js";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -183,10 +184,20 @@ bot.hears(/.+/, async (ctx) => {
       await ctx.reply("لطفا یک عدد معتبر وارد کنید 🔢");
       return;
     }
-    const exercise = await prisma.exercise.create({
-      data: {
+    const selectedExercise = await getSelectedExercise(telegramId);
+    const exercise = await prisma.exercise.upsert({
+      where: {
+        id: selectedExercise ? selectedExercise.id : -1,
+      },
+      create: {
         name: user.tempExerciseName!,
         userId: user.id,
+        sets: user.tempSets!,
+        reps: user.tempReps!,
+        weight: weight,
+      },
+      update: {
+        name: user.tempExerciseName!,
         sets: user.tempSets!,
         reps: user.tempReps!,
         weight: weight,
