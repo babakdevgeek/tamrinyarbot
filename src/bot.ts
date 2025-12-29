@@ -6,6 +6,7 @@ import { addExcerciseMenu } from "./keyboards/Cancel.js";
 import { getExercisesKeyboard } from "./keyboards/allExcercises.js";
 import { buttonsText } from "./constants/buttonsText.js";
 import { persianToEnglishNumber } from "./lib/persianNumConvertors.js";
+import { text } from "node:stream/consumers";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -79,6 +80,19 @@ bot.hears(buttonsText.excerciseDetails.delete, async (ctx) => {
   await ctx.reply("حرکت با موفقیت حذف شد ✅", homeMenu);
 });
 
+bot.hears(buttonsText.excerciseDetails.update, async (ctx) => {
+  const telegramId = BigInt(ctx.from.id);
+  const user = await prisma.user.findUnique({
+    where: { telegramId },
+  });
+  if (!user || !user.selectedExerciseId) return;
+  await prisma.user.update({
+    where: { telegramId },
+    data: { currentStep: steps.wait_name, selectedExerciseId: null },
+  });
+  await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
+});
+
 bot.hears(buttonsText.home.myExercises, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
@@ -93,36 +107,42 @@ bot.hears(buttonsText.home.myExercises, async (ctx) => {
 
   await ctx.reply("حرکات شما:", keyboard);
 });
+bot.hears(buttonsText.excerciseDetails.back, async (ctx) => {
+  const telegramId = BigInt(ctx.from.id);
+  const user = await prisma.user.findUnique({
+    where: { telegramId },
+  });
+  if (!user) return;
+  if (user.currentStep !== steps.in_excercise_details) {
+    const keyboard = await getExercisesKeyboard(user.id);
+    if (!keyboard) {
+      await ctx.reply("هنوز حرکتی ثبت نکرده‌اید.", homeMenu);
+      return;
+    }
+    await prisma.user.update({
+      where: { telegramId },
+      data: { selectedExerciseId: null, currentStep: null },
+    });
+    await ctx.reply("حرکات شما:", keyboard);
+  } else {
+    await prisma.user.update({
+      where: { telegramId },
+      data: { selectedExerciseId: null, currentStep: null },
+    });
+    await ctx.reply("بازگشت به منوی اصلی", homeMenu);
+  }
+});
 
 // it should be last hears
 bot.hears(/.+/, async (ctx) => {
   const telegramId = BigInt(ctx.from.id);
+  const text = ctx.message.text;
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
     include: { exercises: true }, // ✅ این خط باعث می‌شود exercises موجود باشد
   });
   if (!user) return;
 
-  const text = ctx.message.text.trim();
-
-  // دکمه‌های بازگشت یا انصراف
-
-  if (
-    text === buttonsText.addExerciseMenu.back ||
-    text === buttonsText.addExerciseMenu.cancel
-  ) {
-    await prisma.user.update({
-      where: { telegramId },
-      data: {
-        currentStep: null,
-        tempExerciseName: null,
-        tempSets: null,
-        tempReps: null,
-      },
-    });
-    await ctx.reply("بازگشت به منوی اصلی ⬇️", homeMenu);
-    return;
-  }
   // مراحل اضافه کردن حرکت جدید
   if (user.currentStep === steps.wait_name) {
     await prisma.user.update({
