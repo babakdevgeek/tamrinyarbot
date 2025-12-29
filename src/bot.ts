@@ -185,40 +185,59 @@ bot.hears(/.+/, async (ctx) => {
       return;
     }
     const selectedExercise = await getSelectedExercise(telegramId);
-    const exercise = await prisma.exercise.upsert({
-      where: {
-        id: selectedExercise ? selectedExercise.id : -1,
-      },
-      create: {
-        name: user.tempExerciseName!,
-        userId: user.id,
-        sets: user.tempSets!,
-        reps: user.tempReps!,
-        weight: weight,
-      },
-      update: {
-        name: user.tempExerciseName!,
-        sets: user.tempSets!,
-        reps: user.tempReps!,
-        weight: weight,
-      },
-    });
-    await prisma.user.update({
-      where: { telegramId },
-      data: {
-        currentStep: null,
-        tempExerciseName: null,
-        tempSets: null,
-        tempReps: null,
-        tempWeight: null,
-      },
-    });
+    if (selectedExercise) {
+      const exercise = await prisma.exercise.update({
+        where: { id: selectedExercise.id },
+        data: {
+          name: user.tempExerciseName!,
+          sets: user.tempSets!,
+          reps: user.tempReps!,
+          weight,
+        },
+      });
+      await prisma.user.update({
+        where: { telegramId },
+        data: {
+          currentStep: null,
+          tempExerciseName: null,
+          tempSets: null,
+          tempReps: null,
+          tempWeight: null,
+        },
+      });
 
-    await ctx.reply(
-      `حرکت "${exercise.name}" با ${exercise.sets} ست ثبت شد ✅`,
-      homeMenu
-    );
+      await ctx.reply(
+        `حرکت "${exercise.name}" با ${exercise.sets} ست ثبت شد ✅`,
+        homeMenu
+      );
+    } else {
+      const exercise = await prisma.exercise.create({
+        data: {
+          name: user.tempExerciseName!,
+          userId: user.id,
+          sets: user.tempSets!,
+          reps: user.tempReps!,
+          weight,
+        },
+      });
+      await prisma.user.update({
+        where: { telegramId },
+        data: {
+          currentStep: null,
+          tempExerciseName: null,
+          tempSets: null,
+          tempReps: null,
+          tempWeight: null,
+        },
+      });
+
+      await ctx.reply(
+        `حرکت "${exercise.name}" با ${exercise.sets} ست ثبت شد ✅`,
+        homeMenu
+      );
+    }
   }
+
   // مدیریت انتخاب حرکت از صفحه حرکات من
 
   const exercise = user.exercises.find((ex) => ex.name === text);
