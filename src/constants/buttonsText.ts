@@ -14,5 +14,6 @@ export const buttonsText = {
     delete: "🗑 حذف حرکت",
     update: "✏️ آپدیت حرکت",
     back: "⬅️ بازگشت",
+    goToHome: "🏠",
   },
 };

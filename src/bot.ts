@@ -30,6 +30,21 @@ bot.start((ctx) => {
   );
 });
 
+bot.hears(buttonsText.addExerciseMenu.cancel, async (ctx) => {
+  const telegramId = BigInt(ctx.from.id);
+  await prisma.user.update({
+    where: { telegramId },
+    data: {
+      currentStep: null,
+      tempExerciseName: null,
+      tempSets: null,
+      tempReps: null,
+      tempWeight: null,
+    },
+  });
+  await ctx.reply("عملیات کنسل شد ❌", homeMenu);
+});
+
 bot.hears(buttonsText.home.addExercise, async (ctx) => {
   await prisma.user.upsert({
     where: { telegramId: BigInt(ctx.from.id) },
@@ -207,6 +222,15 @@ bot.hears(buttonsText.excerciseDetails.back, async (ctx) => {
     });
     await ctx.reply("بازگشت به منوی اصلی", homeMenu);
   }
+});
+
+bot.hears(buttonsText.excerciseDetails.goToHome, async (ctx) => {
+  const telegramId = BigInt(ctx.from.id);
+  await prisma.user.update({
+    where: { telegramId },
+    data: { selectedExerciseId: null, currentStep: null },
+  });
+  await ctx.reply("بازگشت به منوی اصلی", homeMenu);
 });
 
 // it should be last hears

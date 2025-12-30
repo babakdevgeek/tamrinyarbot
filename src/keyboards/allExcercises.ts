@@ -10,7 +10,7 @@ export async function getExercisesKeyboard(userId: number) {
   const buttons = exercises.map((ex) => [ex.name]);
 
   // اضافه کردن دکمه بازگشت
-  buttons.push(["⬅️ بازگشت"]);
+  buttons.push(["⬅️ بازگشت", "🏠"]);
 
   return Markup.keyboard(buttons).resize();
 }
