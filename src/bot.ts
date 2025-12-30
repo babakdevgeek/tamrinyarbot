@@ -251,7 +251,11 @@ bot.hears(/.+/, async (ctx) => {
     },
   });
 
-  const details = `🏋️‍♂️ ${exercise.name}\nست: ${exercise.sets}\nتکرار: ${exercise.reps}\nوزنه: ${exercise.weight} کیلو`;
+  const details = `🏋️‍♂️ ${exercise.name}
+──────────────
+ست‌ها   ⟶  ${exercise.sets}
+تکرار  ⟶  ${exercise.reps}
+وزنه   ⟶  ${exercise.weight} kg`;
 
   // نمایش جزئیات حرکت با گزینه‌های به‌روزرسانی و حذف
   await ctx.reply(
