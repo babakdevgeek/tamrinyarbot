@@ -365,7 +365,10 @@ bot.hears(/.+/, async (ctx) => {
         buttonsText.excerciseDetails.update,
         buttonsText.excerciseDetails.delete,
       ],
-      [buttonsText.excerciseDetails.back],
+      [
+        buttonsText.excerciseDetails.back,
+        buttonsText.excerciseDetails.goToHome,
+      ],
     ]).resize()
   );
 });
