@@ -254,7 +254,7 @@ bot.hears(/.+/, async (ctx) => {
 
 ست‌ها   ←  ${exercise.sets}
 تکرار  ←  ${exercise.reps}
-وزنه   ←  ${exercise.weight} kg`;
+وزنه   ←  kg ${exercise.weight}`;
 
   // نمایش جزئیات حرکت با گزینه‌های به‌روزرسانی و حذف
   await ctx.reply(
