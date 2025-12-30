@@ -33,6 +33,28 @@ bot.hears(buttonsText.home.addExercise, async (ctx) => {
   await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
 });
 
+bot.hears(buttonsText.home.report, async (ctx) => {
+  const user = await prisma.user.findUnique({
+    where: { telegramId: BigInt(ctx.from.id) },
+    include: { exercises: true },
+  });
+  if (!user || user.exercises.length === 0) {
+    await ctx.reply("هنوز حرکتی ثبت نکرده‌ای 💤", homeMenu);
+    return;
+  }
+  const totalExercises = user.exercises.length;
+  const maxWeightExercise = user.exercises.reduce(
+    (maxEx, currentEx) =>
+      currentEx.weight > (maxEx?.weight ?? 0) ? currentEx : maxEx,
+    null as (typeof user.exercises)[0] | null
+  );
+  let report = `📊 *گزارش تمرینات شما*\n\n`;
+  report += `🏋️‍♂️ تعداد حرکات   ←  ${totalExercises}\n`;
+  report += `⚖️ سنگین‌ترین وزنه ←  ${maxWeightExercise?.weight ?? "-"} kg\n`;
+  report += `🏷 حرکت           ←  ${maxWeightExercise?.name ?? "-"}`;
+  await ctx.reply(report, { parse_mode: "Markdown" });
+});
+
 bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
