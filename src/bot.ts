@@ -72,7 +72,7 @@ bot.hears(buttonsText.home.rank, async (ctx) => {
   });
 
   const message = `🏆 رنک کاربران
-/n
+
 ${lines.join("\n")}`;
   await ctx.reply(message);
 });
