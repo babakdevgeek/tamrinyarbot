@@ -88,7 +88,7 @@ bot.hears(buttonsText.excerciseDetails.update, async (ctx) => {
   if (!user || !user.selectedExerciseId) return;
   await prisma.user.update({
     where: { telegramId },
-    data: { currentStep: steps.wait_name, selectedExerciseId: null },
+    data: { currentStep: steps.wait_name },
   });
   await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
 });
@@ -198,6 +198,7 @@ bot.hears(/.+/, async (ctx) => {
         where: { telegramId },
         data: {
           currentStep: null,
+          selectedExerciseId: null,
           tempExerciseName: null,
           tempSets: null,
           tempReps: null,
