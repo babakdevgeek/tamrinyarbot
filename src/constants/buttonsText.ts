@@ -4,7 +4,7 @@ export const buttonsText = {
     myExercises: "حرکات من",
     allExsInOneMessage: "تمام حرکات در یک لیست",
     report: "📊 گزارش",
-    settings: "⚙️ تنظیمات",
+    rank: "🏆 رتبه بندی",
   },
   addExerciseMenu: {
     back: "⬅️ بازگشت",

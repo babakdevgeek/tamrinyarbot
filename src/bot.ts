@@ -33,6 +33,50 @@ bot.hears(buttonsText.home.addExercise, async (ctx) => {
   await ctx.reply("اسم حرکت را وارد کن 🏋️", addExcerciseMenu);
 });
 
+bot.hears(buttonsText.home.rank, async (ctx) => {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      firstname: true,
+      username: true,
+      exercises: {
+        select: {
+          weight: true,
+        },
+      },
+    },
+  });
+  const ranking = users
+    .map((user) => {
+      const maxWeight = Math.max(...user.exercises.map((ex) => ex.weight), 0);
+
+      return {
+        name: user.firstname || user.username || "بدون‌نام",
+        maxWeight,
+      };
+    })
+    .filter((u) => u.maxWeight > 0)
+    .sort((a, b) => b.maxWeight - a.maxWeight)
+    .slice(0, 10); // مثلا 10 نفر اول
+  const lines = ranking.map((user, index) => {
+    const medal =
+      index === 0
+        ? "🥇"
+        : index === 1
+        ? "🥈"
+        : index === 2
+        ? "🥉"
+        : `${index + 1}.`;
+
+    return `${medal} ${user.name}   ←  ${user.maxWeight} kg`;
+  });
+
+  const message = `🏆 رنک کاربران
+/n
+${lines.join("\n")}`;
+  await ctx.reply(message);
+});
+
 bot.hears(buttonsText.home.report, async (ctx) => {
   const user = await prisma.user.findUnique({
     where: { telegramId: BigInt(ctx.from.id) },
