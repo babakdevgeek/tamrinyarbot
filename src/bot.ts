@@ -45,15 +45,13 @@ bot.hears(buttonsText.home.allExsInOneMessage, async (ctx) => {
   }
 
   // ساخت متن خوانا
-  const line = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
-  let text = `📋 *لیست حرکات شما*\n${line}\n\n`;
+  let text = `📋 *لیست حرکات شما*\n\n`;
   user.exercises.forEach((ex, index) => {
     text += `🏋️ ${ex.name} | ست: ${ex.sets} | وزنه: ${ex.weight}kg\n`;
 
     text += "\n\n";
   });
-  text += line;
 
   await ctx.replyWithPhoto(
     "https://www.primalstrength.com/cdn/shop/files/gymdesign_render_Two_collumn_grid_cb1b5850-fa8e-4a7b-a2b3-190c2e45facd.jpg?v=1680719688&width=500",
@@ -252,7 +250,7 @@ bot.hears(/.+/, async (ctx) => {
   });
 
   const details = `🏋️‍♂️ ${exercise.name}
-──────────────
+
 ست‌ها   ←  ${exercise.sets}
 تکرار  ←  ${exercise.reps}
 وزنه   ←  ${exercise.weight} kg`;
