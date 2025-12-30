@@ -6,7 +6,6 @@ import { addExcerciseMenu } from "./keyboards/Cancel.js";
 import { getExercisesKeyboard } from "./keyboards/allExcercises.js";
 import { buttonsText } from "./constants/buttonsText.js";
 import { persianToEnglishNumber } from "./lib/persianNumConvertors.js";
-import { text } from "node:stream/consumers";
 import { getSelectedExercise } from "./lib/getSelectedExcercise.js";
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -114,7 +113,7 @@ bot.hears(buttonsText.excerciseDetails.back, async (ctx) => {
     where: { telegramId },
   });
   if (!user) return;
-  if (user.currentStep !== steps.in_excercise_details) {
+  if (user.currentStep === steps.in_excercise_details) {
     const keyboard = await getExercisesKeyboard(user.id);
     if (!keyboard) {
       await ctx.reply("هنوز حرکتی ثبت نکرده‌اید.", homeMenu);
@@ -185,7 +184,7 @@ bot.hears(/.+/, async (ctx) => {
       return;
     }
     const selectedExercise = await getSelectedExercise(telegramId);
-    if (selectedExercise) {
+    if (selectedExercise && user.currentStep === steps.wait_weight) {
       const exercise = await prisma.exercise.update({
         where: { id: selectedExercise.id },
         data: {
@@ -207,7 +206,7 @@ bot.hears(/.+/, async (ctx) => {
       });
 
       await ctx.reply(
-        `حرکت "${exercise.name}" با ${exercise.sets} ست ثبت شد ✅`,
+        `حرکت "${exercise.name}" با ${exercise.sets} ست به‌روزرسانی شد ✅`,
         homeMenu
       );
     } else {
