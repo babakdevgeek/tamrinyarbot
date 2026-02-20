@@ -5,6 +5,4 @@ export const homeMenu = Markup.keyboard([
   [buttonsText.home.addExercise, buttonsText.home.myExercises],
   [buttonsText.home.allExsInOneMessage],
   [buttonsText.home.report, buttonsText.home.rank],
-])
-  .resize()
-  .persistent();
+]).resize();
