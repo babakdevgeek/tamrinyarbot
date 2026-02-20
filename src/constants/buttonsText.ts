@@ -7,13 +7,13 @@ export const buttonsText = {
     rank: "🏆 رتبه بندی",
   },
   addExerciseMenu: {
-    back: "⬅️ بازگشت",
-    cancel: "❌ کنسل",
+    back: "⬅️",
+    cancel: "❌ لغو",
   },
   excerciseDetails: {
-    delete: "🗑 حذف حرکت",
-    update: "✏️ آپدیت حرکت",
-    back: "⬅️ بازگشت",
+    delete: "🗑 حذف",
+    update: "✏️ ویرایش",
+    back: "⬅️",
     goToHome: "🏠",
   },
 };
